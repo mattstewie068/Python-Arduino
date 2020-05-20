@@ -7,21 +7,23 @@ uno = pyfirmata.Arduino('COM5')
 it = pyfirmata.util.Iterator(uno)
 it.start()
 
-wled = uno.get_pin('d:10:o')
-rled = uno.get_pin('d:9:o')
-yled = uno.get_pin('d:8:o')
-gled = uno.get_pin('d:7:o')
+wled = uno.get_pin('d:6:o')
+bled = uno.get_pin('d:7:o')
+rled = uno.get_pin('d:8:o')
+yled = uno.get_pin('d:9:o')
+gled = uno.get_pin('d:10:o')
+button1 = uno.get_pin('d:11:i')
+button2 = uno.get_pin('d:12:i')
 pot1 = uno.get_pin('a:0:i')
-button1 = uno.get_pin('d:2:i')
 pot2 = uno.get_pin('a:1:i')
-button2 = uno.get_pin('d:11:i')
+
 buzz = uno.get_pin('d:5:o')
 
 
 def flashing_yellow(slow):
-    yled.write(1)
+    bled.write(1)
     time.sleep(1*slow)
-    yled.write(0)
+    bled.write(0)
     time.sleep(1*slow)
 
 
@@ -42,6 +44,18 @@ def traffic_pattern(slow):
     rled.write(1)
     time.sleep(5*slow)
     rled.write(0)
+
+
+def falshing_cop(slow):
+    bled.write(1)
+    time.sleep(2*slow)
+    bled.write(0)
+    wled.write(1)
+    time.sleep(2*slow)
+    wled.write(0)
+    # rled.write(1)
+    # time.sleep(2*slow)
+    # rled.write(0)
 
 
 pygame.init()
@@ -77,7 +91,8 @@ while RUN:
         flashing_red(pot1_value)
 
     if pygame.mouse.get_pressed()[0]:
-        traffic_pattern(pot1_value)
+        # traffic_pattern(pot1_value)
+        falshing_cop(pot1_value)
 
     screen.fill((0, 0, 0))
 

@@ -4,35 +4,43 @@ import pygame
 
 uno = pyfirmata.Arduino('COM5')
 
+it = pyfirmata.util.Iterator(uno)
+it.start()
+
 wled = uno.get_pin('d:10:o')
 rled = uno.get_pin('d:9:o')
 yled = uno.get_pin('d:8:o')
 gled = uno.get_pin('d:7:o')
+pot1 = uno.get_pin('a:0:i')
+button1 = uno.get_pin('d:2:i')
+pot2 = uno.get_pin('a:1:i')
+button2 = uno.get_pin('d:11:i')
+buzz = uno.get_pin('d:5:o')
 
 
-def falshing_yellow():
+def flashing_yellow(slow):
     yled.write(1)
-    time.sleep(1)
+    time.sleep(1*slow)
     yled.write(0)
-    time.sleep(1)
+    time.sleep(1*slow)
 
 
-def falshing_red():
+def flashing_red(slow):
     rled.write(1)
-    time.sleep(1)
+    time.sleep(1*slow)
     rled.write(0)
-    time.sleep(1)
+    time.sleep(1*slow)
 
 
-def traffic_pattern():
+def traffic_pattern(slow):
     gled.write(1)
-    time.sleep(5)
+    time.sleep(5*slow)
     gled.write(0)
     yled.write(1)
-    time.sleep(2)
+    time.sleep(2*slow)
     yled.write(0)
     rled.write(1)
-    time.sleep(5)
+    time.sleep(5*slow)
     rled.write(0)
 
 
@@ -45,26 +53,31 @@ WINDOWSIZE = [SCREENWIDTH, SCREENHEIGHT]
 screen = pygame.display.set_mode(WINDOWSIZE)
 
 RUN = True
-mouse = False
 while RUN:
     for event in pygame.event.get():  # loop through all events sinse last loop
         if event.type == pygame.QUIT:
             RUN = False
         if pygame.key.get_pressed()[pygame.K_ESCAPE]:
             RUN = False
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            mouse = True
-            if pygame.mouse.get_pressed()[2] and mouse:
-                falshing_yellow()
 
-            if pygame.mouse.get_pressed()[1] and mouse:
-                falshing_red()
+    pot1_value = pot1.read()
+    # print(pot1_value)
+    pot2_value = pot2.read()
+    # print(pot2_value)
+    button1_value = button1.read()
+    # print(button1_value)
+    button2_value = button2.read()
+    # print(button2_value)
+    time.sleep(.1)
 
-            if pygame.mouse.get_pressed()[0] and mouse:
-                traffic_pattern()
+    if pygame.mouse.get_pressed()[2]:
+        flashing_yellow(pot1_value)
 
-        elif event.type == pygame.MOUSEBUTTONUP:
-            mouse = False
+    if pygame.mouse.get_pressed()[1]:
+        flashing_red(pot1_value)
+
+    if pygame.mouse.get_pressed()[0]:
+        traffic_pattern(pot1_value)
 
     screen.fill((0, 0, 0))
 

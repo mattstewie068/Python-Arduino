@@ -1,12 +1,13 @@
-import pyfirmata
 import time
-import pygame
+import pyfirmata
+
 
 uno = pyfirmata.Arduino('COM5')
 
 it = pyfirmata.util.Iterator(uno)
 it.start()
 
+# assign pins and pin state to labels
 led_a = uno.get_pin('d:2:o')
 led_b = uno.get_pin('d:3:o')
 led_c = uno.get_pin('d:4:o')
@@ -133,7 +134,154 @@ def display_9():
     led_g.write(0)
 
 
+def display_a():
+    led_a.write(0)
+    led_b.write(0)
+    led_c.write(0)
+    led_d.write(1)
+    led_e.write(0)
+    led_f.write(0)
+    led_g.write(0)
+
+
+def display_b():
+    led_a.write(0)
+    led_b.write(0)
+    led_c.write(0)
+    led_d.write(0)
+    led_e.write(0)
+    led_f.write(0)
+    led_g.write(0)
+
+
+def display_c():
+    led_a.write(0)
+    led_b.write(1)
+    led_c.write(1)
+    led_d.write(0)
+    led_e.write(0)
+    led_f.write(0)
+    led_g.write(1)
+
+
+def display_d():
+    led_a.write(0)
+    led_b.write(0)
+    led_c.write(1)
+    led_d.write(0)
+    led_e.write(0)
+    led_f.write(0)
+    led_g.write(0)
+
+
+def display_e():
+    led_a.write(0)
+    led_b.write(1)
+    led_c.write(0)
+    led_d.write(0)
+    led_e.write(0)
+    led_f.write(0)
+    led_g.write(1)
+
+
+def display_f():
+    led_a.write(0)
+    led_b.write(1)
+    led_c.write(0)
+    led_d.write(1)
+    led_e.write(0)
+    led_f.write(0)
+    led_g.write(1)
+
+
+def display_g():
+    led_a.write(0)
+    led_b.write(0)
+    led_c.write(0)
+    led_d.write(0)
+    led_e.write(0)
+    led_f.write(0)
+    led_g.write(1)
+
+
+def display_h():
+    led_a.write(0)
+    led_b.write(0)
+    led_c.write(0)
+    led_d.write(1)
+    led_e.write(0)
+    led_f.write(1)
+    led_g.write(0)
+
+
+def display_i():
+    led_a.write(1)
+    led_b.write(0)
+    led_c.write(1)
+    led_d.write(1)
+    led_e.write(1)
+    led_f.write(1)
+    led_g.write(0)
+
+
+def display_j():
+    led_a.write(1)
+    led_b.write(0)
+    led_c.write(1)
+    led_d.write(0)
+    led_e.write(1)
+    led_f.write(1)
+    led_g.write(0)
+
+
+def display_l():
+    led_a.write(0)
+    led_b.write(1)
+    led_c.write(1)
+    led_d.write(0)
+    led_e.write(0)
+    led_f.write(1)
+    led_g.write(1)
+
+
+def display_o():
+    led_a.write(0)
+    led_b.write(0)
+    led_c.write(1)
+    led_d.write(0)
+    led_e.write(0)
+    led_f.write(0)
+    led_g.write(0)
+
+
+def display_r():
+    led_a.write(0)
+    led_b.write(1)
+    led_c.write(1)
+    led_d.write(1)
+    led_e.write(0)
+    led_f.write(0)
+    led_g.write(0)
+
+
+def display_error():
+    display_e()
+    time.sleep(1)
+    display_r()
+    time.sleep(1)
+    display_off()
+    time.sleep(1)
+    display_r()
+    time.sleep(1)
+    display_o()
+    time.sleep(1)
+    display_r()
+    time.sleep(1)
+    display_off()
+
+
 def display_char(i):
+    """displays on 7 segment LED display number that is specified"""
     switcher = {
         0: display_0,
         1: display_1,
@@ -151,68 +299,41 @@ def display_char(i):
     return func()
 
 
-display_char(4)
-
-pygame.init()
-
-SCREENWIDTH = 500
-SCREENHEIGHT = 500
-WINDOWSIZE = [SCREENWIDTH, SCREENHEIGHT]
-
-screen = pygame.display.set_mode(WINDOWSIZE)
-
-RUN = True
-while RUN:
-
-    # led_a.write(1)
-    # led_b.write(1)
-    # led_c.write(1)
-    # led_d.write(1)
-    # led_e.write(1)
-    # led_f.write(1)
-    # led_g.write(1)
-
-    pot1_value = pot1.read()
+def switch_1_state():
+    """returns the state of switch 1"""
     switch1_value = switch_1.read()
+    return switch1_value
+
+
+def switch_2_state():
+    """returns the state of switch 2"""
     switch2_value = switch_2.read()
+    return switch2_value
+
+
+def switch_3_state():
+    """returns the state of switch 3"""
     switch3_value = switch_3.read()
+    return switch3_value
+
+
+def switch_4_state():
+    """returns the state of switch 4"""
     switch4_value = switch_4.read()
+    return switch4_value
 
-    for event in pygame.event.get():  # loop through all events sinse last loop
-        if event.type == pygame.QUIT:
-            RUN = False
-        if pygame.key.get_pressed()[pygame.K_ESCAPE]:
-            RUN = False
-        if pygame.key.get_pressed()[pygame.K_SPACE]:
-            print(switch1_value)
-            print(switch2_value)
-            print(switch3_value)
-            print(switch4_value)
 
-    if pygame.mouse.get_pressed()[0]:
-        display_0()
-        time.sleep(pot1.read())
-        display_1()
-        time.sleep(pot1.read())
-        display_2()
-        time.sleep(pot1.read())
-        display_3()
-        time.sleep(pot1.read())
-        display_4()
-        time.sleep(pot1.read())
-        display_5()
-        time.sleep(pot1.read())
-        display_6()
-        time.sleep(pot1.read())
-        display_7()
-        time.sleep(pot1.read())
-        display_8()
-        time.sleep(pot1.read())
-        display_9()
-        time.sleep(pot1.read())
+def pot_1_state():
+    """returns the state of potentiometer 1"""
+    pot1_value = pot1.read()
+    return pot1_value
 
-    screen.fill((0, 0, 0))
 
-    pygame.display.flip()
-
-pygame.quit()
+display_error()
+display_char(4)
+time.sleep(1)
+display_char(0)
+time.sleep(1)
+display_char(4)
+time.sleep(1)
+display_off()

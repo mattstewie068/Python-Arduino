@@ -1,5 +1,5 @@
-import pyfirmata
 import time
+import pyfirmata
 
 uno = pyfirmata.Arduino('COM5')
 
